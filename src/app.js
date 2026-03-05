@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express=require("express");
 const connectDB =require("./Config/database");
 const app=express();
@@ -8,7 +7,7 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/requests");
 const userRouter=require("./routes/user");
 const cors= require("cors");
-
+require("dotenv").config();
 
 // Middlewares
 app.use(cors({
@@ -28,7 +27,7 @@ app.use("/",userRouter);
 connectDB()
 .then(()=>{
     console.log("Database Connection Established....");
-    app.listen(7777,()=>{
+    app.listen(process.env.PORT,()=>{
     console.log("Server listen successfully on port 7777");
 });
 })
