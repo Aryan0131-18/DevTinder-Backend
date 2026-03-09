@@ -7,6 +7,9 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/requests");
 const userRouter=require("./routes/user");
 const cors= require("cors");
+const http=require("http");
+const initializeSocket = require("./utils/socket");
+const chatRouter = require("./routes/chat");
 require("dotenv").config();
 
 // Middlewares
@@ -22,12 +25,17 @@ app.use("/",authRouter);
 app.use("/",profileRouter);
 app.use("/",requestRouter);
 app.use("/",userRouter);
+app.use("/",chatRouter);
+
+const server= http.createServer(app);
+
+initializeSocket(server);
  
 
 connectDB()
 .then(()=>{
     console.log("Database Connection Established....");
-    app.listen(process.env.PORT,()=>{
+    server.listen(process.env.PORT,()=>{
     console.log("Server listen successfully on port 7777");
 });
 })
