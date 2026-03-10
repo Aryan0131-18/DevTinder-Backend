@@ -27,7 +27,13 @@ const userSchema= new mongoose.Schema({
         required:true
     },
     photoUrl:{
-        type:String,
+        type: String,
+      default: "https://geographyandyou.com/images/user-profile.png",
+      validate(value) {
+        if (!validator.isURL(value)) {
+          throw new Error("Invalid Photo URL: " + value);
+        }
+      },
     },
     age:{
         type:Number
@@ -42,7 +48,8 @@ const userSchema= new mongoose.Schema({
         },
     },
     skills:{
-        type:[]
+    type: [String],
+    default: ["Developer"],
     },
     about:{
         type:String,
@@ -53,7 +60,7 @@ const userSchema= new mongoose.Schema({
 userSchema.methods.getJWT=async function() {
     const user=this;
 
-    const token= await jwt.sign({_id: user._id},"DEV@T$20");
+    const token= await jwt.sign({_id: user._id},process.env.JWT_SECRET);
 
     return token;
 }
